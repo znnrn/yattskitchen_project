@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'admin_dashboard.dart'; // Ensure you have created this file
+import 'FoodMenuScreen.dart'; // Import for navigation to the menu
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -142,7 +143,6 @@ class _WelcomePageState extends State<WelcomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Smaller icon next to title
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
@@ -208,7 +208,11 @@ class _WelcomePageState extends State<WelcomePage> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     ),
                     onPressed: () {
-                      // Navigate to Menu
+                      // Navigate to Food Menu Screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const FoodMenuScreen()),
+                      );
                     },
                     child: const Text('Continue', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   ),
