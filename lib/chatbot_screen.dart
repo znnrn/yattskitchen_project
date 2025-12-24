@@ -14,7 +14,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   bool _isLoading = false;
 
   // REPLACE WITH YOUR ACTUAL API KEY
-  static const String _apiKey = 'AIzaSyAjIbd7bqSVeSFJriEp9wGWb8dfN4SsoK4';
+  static const String _apiKey = 'API KEY HERE';
   
   late final GenerativeModel _model;
   late final ChatSession _chat;
