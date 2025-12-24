@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'FoodMenuScreen.dart'; 
+import 'splashscreen.dart'; // Ensure this filename matches exactly
 
 void main() {
   runApp(const MyApp());
@@ -11,15 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Yatt's Kitchen UI",
-      debugShowCheckedModeBanner: false, 
+      title: "Yatt's Kitchen",
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.amber, 
-        primaryColor: const Color(0xFFFFCC33),
-        scaffoldBackgroundColor: const Color(0xFFFFF9F0), 
-        fontFamily: 'Montserrat',
+        primarySwatch: Colors.orange,
+        useMaterial3: true,
       ),
-      home: const FoodMenuScreen(), 
+      // This tells Flutter to open the Splash Screen first
+      home: const SplashScreen(), 
     );
   }
 }
