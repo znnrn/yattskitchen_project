@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'popular_food_cart.dart'; 
-import 'my_cart_page.dart'; // Import will now be used below
+import 'my_cart_page.dart';
+import 'chatbot_screen.dart'; // Import will now be used below
 
 // --- FOOD ITEM DATA MODEL ---
 class FoodItem {
@@ -105,6 +106,17 @@ class _FoodMenuScreenState extends State<FoodMenuScreen> {
         elevation: 0,
         flexibleSpace: _buildHeader(),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+        // 2. Add the navigation
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+        );
+      },
+      backgroundColor: const Color(0xFFE67E22),
+      child: const Icon(Icons.chat_bubble_outline, color: Colors.white),
+    ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
