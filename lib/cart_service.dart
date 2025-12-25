@@ -37,6 +37,11 @@ class CartService extends ChangeNotifier {
     return _items.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
   }
   
+  void clearCart() {
+    _items.clear(); // Clears the list of items in the cart
+    notifyListeners(); // Tells the UI to refresh (so the cart shows 0 items)
+  }
+
   // Logic: Add Item
   void addItem(FoodItem foodItem) {
     if (foodItem.price == null) return; 

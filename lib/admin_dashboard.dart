@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'incoming_orders_screen.dart'; 
+import 'admin_settings_screen.dart'; 
 
-class AdminDashboard extends StatelessWidget {
+class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
 
   @override
+  State<AdminDashboard> createState() => _AdminDashboardState();
+}
+
+class _AdminDashboardState extends State<AdminDashboard> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9EBDD), // Light cream background
-      bottomNavigationBar: _buildBottomNav(),
+      backgroundColor: const Color(0xFFF9EBDD),
+      bottomNavigationBar: _buildBottomNav(context),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -32,19 +39,45 @@ class AdminDashboard extends StatelessWidget {
                       _buildStatCard("Today's Revenue", "RM 300", Icons.attach_money, const Color(0xFF9B59B6)),
                     ],
                   ),
-                  
                   const SizedBox(height: 24),
                   const Text("Quick Actions", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
 
-                  // 2. Quick Actions Grid
-                  _buildQuickActions(),
+                  // 2. Quick Actions Grid with Hovering Capability
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 2.5,
+                    children: [
+                      HoverActionBtn(
+                        label: "New Order", 
+                        icon: Icons.bakery_dining, 
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const IncomingOrdersScreen())),
+                      ),
+                      HoverActionBtn(
+                        label: "Menu Items", 
+                        icon: Icons.restaurant_menu, 
+                        onTap: () { /* Add navigation here */ },
+                      ),
+                      HoverActionBtn(
+                        label: "Analytics", 
+                        icon: Icons.bar_chart, 
+                        onTap: () { /* Add navigation here */ },
+                      ),
+                      HoverActionBtn(
+                        label: "Settings", 
+                        icon: Icons.settings, 
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminSettingsScreen())),
+                      ),
+                    ],
+                  ),
 
                   const SizedBox(height: 24),
                   const Text("Recent Activity", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
-
-                  // 3. Activity List
                   _buildActivityList(),
                 ],
               ),
@@ -55,8 +88,7 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 
-  // --- UI Components ---
-
+  // --- Header ---
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
@@ -87,30 +119,19 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 
+  // --- Stats Cards ---
   Widget _buildStatCard(String title, String value, IconData icon, Color color, {String? growth}) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(icon, color: Colors.white70, size: 20),
-              if (growth != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(10)),
-                  child: Text(growth, style: const TextStyle(color: Colors.white, fontSize: 10)),
-                ),
-            ],
-          ),
+          Icon(icon, color: Colors.white70, size: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -123,51 +144,14 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActions() {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 2.5,
-      children: [
-        _actionBtn("New Order", Icons.bakery_dining, Colors.orange),
-        _actionBtn("Menu Items", Icons.restaurant_menu, Colors.grey.shade400),
-        _actionBtn("Analytics", Icons.bar_chart, Colors.grey.shade400),
-        _actionBtn("Settings", Icons.settings, Colors.grey.shade400),
-      ],
-    );
-  }
-
-  Widget _actionBtn(String label, IconData icon, Color color) {
-    return Container(
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(15)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.white),
-          const SizedBox(width: 8),
-          Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
-
+  // --- Recent Activity ---
   Widget _buildActivityList() {
     return Container(
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
       child: Column(
         children: [
-          _activityItem("Order #1247", "Completed & delivered", "2 min ago", Icons.check_circle, Colors.green),
-          const Divider(height: 1),
-          _activityItem("Order #1248", "New order received", "5 min ago", Icons.notifications_active, Colors.blue),
-          const Divider(height: 1),
-          _activityItem("Order #1249", "Ready for pickup", "8 min ago", Icons.access_time_filled, Colors.orange),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: TextButton(onPressed: () {}, child: const Text("View All →", style: TextStyle(color: Colors.orange))),
-          )
+          _activityItem("Order #1247", "Completed", "2 min ago", Icons.check_circle, Colors.green),
+          _activityItem("Order #1248", "New order", "5 min ago", Icons.notifications, Colors.blue),
         ],
       ),
     );
@@ -177,24 +161,87 @@ class AdminDashboard extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(backgroundColor: color.withOpacity(0.1), child: Icon(icon, color: color, size: 20)),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text(sub, style: const TextStyle(fontSize: 12)),
+      subtitle: Text(sub),
       trailing: Text(time, style: const TextStyle(color: Colors.grey, fontSize: 11)),
     );
   }
 
-  Widget _buildBottomNav() {
+  Widget _buildBottomNav(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       selectedItemColor: Colors.orange,
       unselectedItemColor: Colors.grey,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
+      onTap: (index) {
+        if (index == 3) Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminSettingsScreen()));
+      },
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ""),
         BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: ""),
         BottomNavigationBarItem(icon: Icon(Icons.access_time), label: ""),
         BottomNavigationBarItem(icon: Icon(Icons.tune), label: ""),
       ],
+    );
+  }
+}
+
+// --- THIS IS THE HOVER BUTTON THAT MAKES IT WORK ---
+class HoverActionBtn extends StatefulWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const HoverActionBtn({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  State<HoverActionBtn> createState() => _HoverActionBtnState();
+}
+
+class _HoverActionBtnState extends State<HoverActionBtn> {
+  bool _isPressed = false; // Changed from Hover to Pressed
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      // When the user touches the button
+      onTapDown: (_) => setState(() => _isPressed = true),
+      // When the user lifts their finger
+      onTapUp: (_) => setState(() => _isPressed = false),
+      // If the user drags their finger away
+      onTapCancel: () => setState(() => _isPressed = false),
+      onTap: widget.onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        decoration: BoxDecoration(
+          // Logic: If touched/pressed, turn Orange. Otherwise, stay Grey.
+          color: _isPressed ? const Color(0xFFFF7E21) : const Color(0xFFE0E0E0),
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: _isPressed 
+              ? [BoxShadow(color: Colors.orange.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5))]
+              : [],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              widget.icon, 
+              color: _isPressed ? Colors.white : Colors.black54
+            ),
+            const SizedBox(width: 8),
+            Text(
+              widget.label,
+              style: TextStyle(
+                color: _isPressed ? Colors.white : Colors.black54,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

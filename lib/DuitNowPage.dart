@@ -247,7 +247,7 @@ class _DuitNowQrContent extends StatelessWidget {
                 // *** SYNTAX FIX APPLIED HERE: Clean Image.asset call with named 'fit' ***
                 child: Image.asset(
                   // Ensure this path is correct based on your pubspec.yaml setup
-                  'assets/duitnow.jpg', 
+                  'assets/PianLisEnterprise.jpeg', 
                   fit: BoxFit.contain,
                 ),
               ),
@@ -264,6 +264,51 @@ class _DuitNowQrContent extends StatelessWidget {
               'Transaction ID: ${qrData.split('/').last}',
               style: const TextStyle(fontSize: 14, color: Colors.black54),
             ),
+            const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Logic after payment is done (e.g., clear cart and go to home)
+                  CartService.instance.clearCart(); 
+                  
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Payment Received"),
+                      content: const Text("Thank you! Your order is being processed."),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                          },
+                          child: const Text("Back to Menu"),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFE67E22), // Matches theme orange
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  "I've completed payment",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 40),
           ],
         ),
       ),
